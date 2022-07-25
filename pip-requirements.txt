@@ -1,0 +1,9 @@
+pip
+setuptools
+wheel
+requests~=2.28.0
+
+ansible-core~=2.12.0
+ansible-lint~=6.3.0
+
+yamllint~=1.27.1
