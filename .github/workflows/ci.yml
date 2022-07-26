@@ -53,7 +53,7 @@ jobs:
 
       - name: Install test dependencies.
         run: |
-          sudo pip3 install --upgrade pip
+          # sudo pip3 install --upgrade pip
           sudo pip3 install -r pip-requirements.txt
 
       - name: Set up the test environment.
