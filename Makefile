@@ -140,7 +140,7 @@ lint: lint-ansible-lint lint-yamllint ## lint all
 
 lint-ansible-lint: ## lint roles
 	@cd $(MY_DIR) && \
-		$(VENV_DIR)/bin/ansible-lint --offline -c $(MY_DIR)/.ansible-lint.yml -p roles/ \
+		$(VENV_DIR)/bin/ansible-lint --offline -c $(MY_DIR)/.ansible-lint.yml -p \
 		|| { [ "$?" = 2 ] && true; }
 # ifneq ($(CLTN_ROLES),)
 # 	cd $(MY_DIR) && \

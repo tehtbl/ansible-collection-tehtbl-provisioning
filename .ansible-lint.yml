@@ -17,10 +17,10 @@ skip_list:
   # While it can be useful to have these metadata available, they are also available in the existing documentation.
   - '701'
 
-  # [role-name] "meta/main.yml" Role name role-name does not match ``^+$`` pattern
-  # Meta roles don't need proper names
-  - 'role-name'
-
-  # [var-naming] "defaults/main.yml" File defines variable 'apiVersion' that violates variable naming standards
-  # We use variables that use camelCase to match their k8s counterparts
-  - 'var-naming'
+  # # [role-name] "meta/main.yml" Role name role-name does not match ``^+$`` pattern
+  # # Meta roles don't need proper names
+  # - 'role-name'
+  #
+  # # [var-naming] "defaults/main.yml" File defines variable 'apiVersion' that violates variable naming standards
+  # # We use variables that use camelCase to match their k8s counterparts
+  # - 'var-naming'
