@@ -1,8 +1,8 @@
 ---
-namespace: "tehtbl"
-name: "provisioning"
-version: "0.0.1"
-readme: "README.md"
+namespace: tehtbl
+name: provisioning
+version: 0.0.1
+readme: README.md
 
 authors:
   - "@tehtbl <3999809+tehtbl@users.noreply.github.com>"
@@ -16,7 +16,7 @@ description: An Ansible collection to provision a host and prepare it for their 
 
 # The path to the license file for the collection. This path is relative to the root of the collection. This key is
 # mutually exclusive with 'license'
-license_file: LICENSE.md
+license_file: LICENSE
 
 # A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
 # requirements as 'namespace' and 'name'
@@ -27,9 +27,9 @@ tags:
   - server
 
 dependencies:
-  ansible.posix: "1.4.0"
-  community.general: "5.0.0"
-  geerlingguy.docker: "4.2.4"
+  ansible.posix: 1.4.0
+  community.general: 5.0.0
+  geerlingguy.docker: 4.2.4
 
 repository: https://github.com/tehtbl/ansible-collection-tehtbl-provisioning.git
 documentation: https://github.com/tehtbl/ansible-collection-tehtbl-provisioning
