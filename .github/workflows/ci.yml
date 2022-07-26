@@ -5,12 +5,12 @@ name: CI
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 5 * * 0"
+#    schedule:
+#      - cron: "0 5 * * 0"
 
-defaults:
-  run:
-    working-directory: ansible_collections/tehtbl/mac
+# defaults:
+#   run:
+#     working-directory: ansible_collections/tehtbl/mac
 
 jobs:
 
@@ -20,8 +20,8 @@ jobs:
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v2
-        with:
-          path: ansible_collections/tehtbl/mac
+        # with:
+        #   path: ansible_collections/tehtbl/mac
 
       - name: Set up Python 3.
         uses: actions/setup-python@v2
@@ -38,17 +38,18 @@ jobs:
 
   integration:
     name: Integration
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - debian-latest
+    # runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
+    # strategy:
+    #   matrix:
+    #     os:
+    #       - debian-latest
 
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v2
-        with:
-          path: ansible_collections/tehtbl/mac
+        # with:
+        #   path: ansible_collections/tehtbl/mac
 
       - name: Install test dependencies.
         run: |

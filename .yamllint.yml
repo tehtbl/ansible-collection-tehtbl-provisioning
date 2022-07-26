@@ -1,6 +1,10 @@
 ---
 extends: default
 
+ignore: |
+  .venv3/
+  examples/
+
 rules:
   braces:
     max-spaces-inside: 1

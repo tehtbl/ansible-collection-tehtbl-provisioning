@@ -3,7 +3,7 @@
   remote_user: "{{ bootstrap_remote_user | default(omit) }}"
   block:
     - name: install software for Debian
-      raw: "LANG=C apt-get update && apt-get install -y {{ bootstrap_packages }}"
+      builtin.raw: "LANG=C apt-get update && apt-get install -y {{ bootstrap_packages }}"
       when:
         - debian.rc == 0
         - bootstrap_packages is defined
@@ -14,7 +14,7 @@
       retries: "{{ bootstrap_retries }}"
 
     - name: install software for Ubuntu
-      raw: "LANG=C apt-get update && apt-get install -y {{ bootstrap_packages }}"
+      builtin.raw: "LANG=C apt-get update && apt-get install -y {{ bootstrap_packages }}"
       when:
         - ubuntu.rc == 0
         - bootstrap_packages is defined

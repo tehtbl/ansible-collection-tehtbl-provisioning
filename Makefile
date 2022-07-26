@@ -139,24 +139,21 @@ lint: lint-ansible-lint lint-yamllint ## lint all
 #       https://github.com/ansible/galaxy/blob/master/galaxy/importer/linters/__init__.py
 
 lint-ansible-lint: ## lint roles
-ifneq ($(CLTN_ROLES),)
-	cd $(MY_DIR) && \
-		$(VENV_DIR)/bin/ansible-lint --offline \
-		-p \
-		$(addprefix "roles/",$(CLTN_ROLES)) \
+	@cd $(MY_DIR) && \
+		$(VENV_DIR)/bin/ansible-lint --offline -c $(MY_DIR)/.ansible-lint.yml -p roles/ \
 		|| { [ "$?" = 2 ] && true; }
-# ansible-lint exit code 1 is app exception, 0 is no linter err, 2 is linter err
-endif
+# ifneq ($(CLTN_ROLES),)
+# 	cd $(MY_DIR) && \
+# 		$(VENV_DIR)/bin/ansible-lint --offline \
+# 		-p \
+# 		$(addprefix "roles/",$(CLTN_ROLES)) \
+# 		|| { [ "$?" = 2 ] && true; }
+# # ansible-lint exit code 1 is app exception, 0 is no linter err, 2 is linter err
+# endif
 
 lint-yamllint: ## lint apbs und roles
-ifneq ($(CLTN_ROLES),)
-	cd $(MY_DIR) && \
-		$(VENV_DIR)/bin/yamllint \
-		-f parsable \
-		-c '$(MY_DIR)/.yamllint.yml' \
-		-- \
-		$(addprefix "roles/",$(CLTN_ROLES))
-endif
+	@cd $(MY_DIR) && \
+		$(VENV_DIR)/bin/yamllint -c $(MY_DIR)/.yamllint.yml -f auto .
 
 #
 #

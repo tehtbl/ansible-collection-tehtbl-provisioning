@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------
 
 - name: wait for the host
-  wait_for:
+  builtin.wait_for:
     port: "{{ ansible_port | default('22') }}"
     host: "{{ (ansible_ssh_host | default(ansible_host) | default(inventory_hostname)) }}"
   connection: local
@@ -18,7 +18,7 @@
   remote_user: "{{ bootstrap_remote_user | default(omit) }}"
   block:
     - name: test connection (allowed to fail)
-      wait_for_connection:
+      builtin.wait_for_connection:
         timeout: "{{ bootstrap_timeout }}"
       register: bootstrap_connect
       changed_when: false
@@ -34,10 +34,10 @@
   remote_user: "{{ bootstrap_remote_user | default(omit) }}"
   block:
     - name: gather facts
-      setup:
+      builtin.setup:
 
     - name: install bootstrap_facts_packages
-      package:
+      builtin.package:
         name: "{{ item }}"
         state: present
       with_items: "{{ bootstrap_facts_packages.split() }}"

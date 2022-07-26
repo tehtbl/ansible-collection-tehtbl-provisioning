@@ -5,26 +5,26 @@
   check_mode: false
   block:
     - name: register Debian
-      raw: test -f /etc/debian_version && grep "ID=debian" /etc/os-release >/dev/null && grep PRETTY_NAME /etc/os-release
+      ansible.legacy.raw: test -f /etc/debian_version && grep "ID=debian" /etc/os-release >/dev/null && grep PRETTY_NAME /etc/os-release
       register: debian
       changed_when: false
       failed_when: false
 
     - name: set variables for Debian
-      set_fact:
+      builtin.set_fact:
         bootstrap_distribution: "{{ debian.stdout | regex_replace('^.*=.([a-zA-Z]*) .*\n$', '\\1') }}"
         bootstrap_distribution_major_version: "{{ debian.stdout | regex_replace('^.* (\\d{2,3})(\\.\\d)?.*\n$', '\\1') }}"
       when:
         - debian.rc == 0
 
     - name: register Ubuntu
-      raw: test -f /etc/debian_version && grep "ID=ubuntu" /etc/os-release >/dev/null && grep PRETTY_NAME /etc/os-release
+      ansible.legacy.raw: test -f /etc/debian_version && grep "ID=ubuntu" /etc/os-release >/dev/null && grep PRETTY_NAME /etc/os-release
       register: ubuntu
       changed_when: false
       failed_when: false
 
     - name: set variables for Ubuntu
-      set_fact:
+      builtin.set_fact:
         bootstrap_distribution: "{{ ubuntu.stdout | regex_replace('^.*=.([a-zA-Z]*) .*\n$', '\\1') }}"
         bootstrap_distribution_major_version: "{{ ubuntu.stdout | regex_replace('^.* (\\d{2,3})(\\.\\d)?.*\n$', '\\1') }}"
       when:
