@@ -84,7 +84,7 @@ venv: venv_mkdir ## install python dependencies
 venv_mkdir: venv_remove
 	@test -d $(VENV_DIR) || python3 -m venv $(VENV_DIR)
 
-venv_remove: ## remove venv dir
+venv_remove:
 	@-test -d $(VENV_DIR) && rm -rf $(VENV_DIR)
 
 #
@@ -95,7 +95,7 @@ $(CLTN_DIR)/$(CLTN_FILE):
 	build_dir=$$(readlink $(CLTN_DIR) ); \
 	[ ! -d .cache/build/ ] || rm -rf .cache/build/ && \
 	mkdir -p .cache/build && \
-	git archive master | tar -x -C .cache/build/ && \
+	git archive main | tar -x -C .cache/build/ && \
 	cd .cache/build/ && \
 	$(VENV_DIR)/bin/ansible-galaxy collection build --output-path "$$build_dir"
 # Build in a clean subdir without any ignored files and directories is required because Ansible Galaxy prior to 2.10
@@ -103,13 +103,13 @@ $(CLTN_DIR)/$(CLTN_FILE):
 # Ref.: https://docs.ansible.com/ansible/latest/dev_guide/collections_galaxy_meta.html
 
 .PHONY: build-collection
-build-collection: $(CLTN_DIR)/$(CLTN_FILE)
+build-collection: $(CLTN_DIR)/$(CLTN_FILE)  ## build collection
 
 #
 #
 #
 .PHONY: help-modules
-help-modules:
+help-modules:  ## help with modules
 ifneq ($(CLTN_MODULES),)
 	cd $(MY_DIR) && \
 		$(VENV_DIR)/bin/ansible-doc --type module $(addprefix "$(CLTN_NAMESPACE).$(CLTN_NAME).",$(CLTN_MODULES))
@@ -127,18 +127,18 @@ install-required-roles:
 	cd $(MY_DIR) && \
 		$(VENV_DIR)/bin/ansible-galaxy role install --role-file requirements.yml
 
-install-requirements: install-required-collections install-required-roles
+install-requirements: install-required-collections install-required-roles ## instal requirements
 
 #
 #
 #
 .PHONY: lint lint-ansible-lint lint-flake8 lint-yamllint
-lint: lint-ansible-lint lint-flake8 lint-yamllint
+lint: lint-ansible-lint lint-yamllint ## lint all
 
 # NOTE: Keep linting targets and its options in sync with official Ansible Galaxy linters at
 #       https://github.com/ansible/galaxy/blob/master/galaxy/importer/linters/__init__.py
 
-lint-ansible-lint: # lint roles
+lint-ansible-lint: ## lint roles
 ifneq ($(CLTN_ROLES),)
 	cd $(MY_DIR) && \
 		$(VENV_DIR)/bin/ansible-lint --offline \
@@ -148,7 +148,7 @@ ifneq ($(CLTN_ROLES),)
 # ansible-lint exit code 1 is app exception, 0 is no linter err, 2 is linter err
 endif
 
-lint-yamllint: # lint apbs und roles
+lint-yamllint: ## lint apbs und roles
 ifneq ($(CLTN_ROLES),)
 	cd $(MY_DIR) && \
 		$(VENV_DIR)/bin/yamllint \
