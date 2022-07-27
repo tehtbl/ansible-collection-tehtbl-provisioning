@@ -1,0 +1,26 @@
+---
+# ------------------------------------------------------------------------
+# vars file for base_packages
+# ------------------------------------------------------------------------
+
+_mypackages_packages:
+  default:
+    - less
+    - python3
+    - git
+    - bzip2
+    - zip
+    - unzip
+    - htop
+    - curl
+    - wget
+    - pwgen
+    - figlet
+    - cowsay
+    - aptitude
+    - logrotate
+    - ca-certificates
+
+mypackages_packages: "{{ _mypackages_packages[ansible_os_family] | default(_mypackages_packages['default']) }}"
+
+# default: less python3 git bzip2 zip unzip htop curl wget pwgen figlet cowsay glances aptitude logrotate ca-certificates

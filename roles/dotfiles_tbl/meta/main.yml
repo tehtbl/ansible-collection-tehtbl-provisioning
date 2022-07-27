@@ -1,0 +1,31 @@
+---
+galaxy_info:
+  author: "@tehtbl <3999809+tehtbl@users.noreply.github.com>"
+  role_name: dotfiles_tbl
+  description: Install and configure my dotfiles on your system.
+  license: PRIVATE
+  company: None
+  min_ansible_version: 2.8
+
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - sid
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+
+  galaxy_tags:
+    - dotfiles
+    - bash
+    - vim
+    - client
+    - server
+    - system
+    - debian
+    - ubuntu
+    - linux
+
+dependencies: []

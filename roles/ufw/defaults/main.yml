@@ -1,0 +1,14 @@
+---
+# ------------------------------------------------------------------------
+# defaults file for ufw
+# ------------------------------------------------------------------------
+
+# Default Incoming Rule
+ufw_def_incoming: "deny"
+
+# Default Outgoing Rule
+ufw_def_outgoing: "allow"
+
+# Default Rules
+ufw_rules:
+  - {direction: "in", rule: "allow", port: "22", proto: "tcp"}

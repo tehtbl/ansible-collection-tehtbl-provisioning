@@ -1,0 +1,64 @@
+---
+# ------------------------------------------------------------------------
+# tasks file for dotfiles_tbl
+# ------------------------------------------------------------------------
+
+- name: install packages
+  package:
+    name: "{{ dotfiles_tbl_packages }}"
+    state: present
+  register: dotfiles_tbl_install_dotfiles_tbl
+  until: dotfiles_tbl_install_dotfiles_tbl is succeeded
+  retries: 3
+  become: True
+
+# ------------------------------------------------------------------------
+# install dotfiles
+# ------------------------------------------------------------------------
+- name: make sure dotfiles working dir does not exist
+  file:
+    path: "{{ dotfiles_working_dir }}"
+    state: absent
+
+- name: checkout dotfiles repo
+  git:
+    repo: "{{ dotfiles_gh_repo }}"
+    dest: "{{ dotfiles_working_dir }}"
+
+- name: make sure dir exist with correct perms
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755')  }}"
+    state: directory
+    recurse: true
+  with_items:
+    - { path: "{{ dotfiles_working_dir }}" }
+  become: true
+  become_user: root
+
+- name: make install all dotfiles for users
+  make:
+    chdir: "{{ dotfiles_working_dir }}"
+    target: all
+  become: true
+  become_user: "{{ item }}"
+  with_items:
+    - "{{ dotfiles_users }}"
+
+- name: cleanup, make sure dotfiledir does not exist anymore
+  file:
+    path: "{{ dotfiles_working_dir }}"
+    state: absent
+  become: true
+  become_user: root
+
+- name: remove config files
+  file:
+    path: "{{ ansible_env.HOME }}/.gitconfig"
+    state: absent
+  become: true
+  become_user: "{{ item }}"
+  with_items:
+    - "{{ dotfiles_users }}"

@@ -1,0 +1,72 @@
+---
+# ------------------------------------------------------------------------
+# tasks file for swap
+# ------------------------------------------------------------------------
+
+- name: configure swap file swappiness and cache pressure
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: "present"
+    reload: true
+  with_dict: "{{ swap_sysctl }}"
+  when:
+    - not swap_delete | bool
+    - ansible_connection != "docker"
+
+- name: disable swap file
+  shell: test -f {{ swap_path }} && swapoff {{ swap_path }} || true
+  changed_when: false
+  when: swap_delete | bool
+
+- name: create swap file
+  command: |
+    {% if swap_fallocate %}
+    fallocate -l {{ ((swap_size) | int * 1024 * 1024) }} {{ swap_path }}
+    {% else %}
+    dd if=/dev/zero of={{ swap_path }} bs=1M count={{ swap_size }}
+    {% endif %}
+  args:
+    creates: "{{ swap_path }}"
+  register: swap_register_create
+  when: not swap_delete | bool
+
+- name: set swap file permissions
+  file:
+    path: "{{ swap_path }}"
+    state: "file"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  when:
+    - not swap_delete | bool
+    - not ansible_check_mode | bool
+
+- name: initialize swap file
+  command: mkswap {{ swap_path }}
+  when:
+    - swap_register_create is changed
+    - not swap_delete | bool
+
+- name: enable swap file
+  command: swapon {{ swap_path }}
+  when:
+    - swap_register_create is changed
+    - not swap_delete | bool
+    - ansible_connection != "docker"
+
+- name: manage swap file in /etc/fstab
+  mount:
+    src: "{{ swap_path }}"
+    name: "none"
+    fstype: "swap"
+    opts: "sw,nofail"
+    dump: "0"
+    passno: "0"
+    state: "{{ 'absent' if swap_delete else 'present' }}"
+
+- name: remove swap file
+  file:
+    path: "{{ swap_path }}"
+    state: "absent"
+  when: swap_delete | bool

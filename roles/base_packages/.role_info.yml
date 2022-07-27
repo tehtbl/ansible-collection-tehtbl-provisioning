@@ -1,0 +1,9 @@
+---
+gid: 45211
+name: base_packages
+desc: Install and configure base packages on your system.
+deps:
+  - tehtbl.bootstrap
+  - tehtbl.update
+  - tehtbl.reboot
+tags: []

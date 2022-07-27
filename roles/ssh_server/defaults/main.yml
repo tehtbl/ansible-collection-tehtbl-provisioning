@@ -1,0 +1,14 @@
+---
+# ------------------------------------------------------------------------
+# defaults file for ssh_server
+# ------------------------------------------------------------------------
+
+# Re-new all sshd server keys
+ssh_server_renew_keys: false
+
+# Copy issue.net
+ssh_server_copy_issue_net: true
+
+# AllowUsers directive to specify who can connect to the ssh server
+ssh_server_allow_users:
+  - "*"

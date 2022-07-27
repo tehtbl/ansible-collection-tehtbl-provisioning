@@ -1,0 +1,8 @@
+---
+gid: 45534
+name: ufw
+desc: Install and configure ufw on your system.
+deps: []
+tags:
+  - firewall
+  - ufw

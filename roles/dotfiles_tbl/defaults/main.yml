@@ -1,0 +1,12 @@
+---
+# ------------------------------------------------------------------------
+# defaults file for dotfiles_tbl
+# ------------------------------------------------------------------------
+
+dotfiles_gh_repo: "https://github.com/tehtbl/dotfiles.git"
+
+dotfiles_users:
+  - "root"
+  - "{{ ansible_ssh_user }}"
+
+dotfiles_working_dir: "/tmp/dotfiles"

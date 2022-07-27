@@ -1,33 +1,11 @@
 # Roles
 
-- tehtbl.base_packages
-- tehtbl.bootstrap
-- tehtbl.ntp
-- tehtbl.reboot
-- tehtbl.swap
-- tehtbl.ufw
-- tehtbl.update
-- tehtbl.cron
-- tehtbl.dotfiles
-- tehtbl.ssh_server
-- tehtbl.swap
-- tehtbl.reboot
-
-- tehtbl.base_packages
-- tehtbl.bootstrap
-- tehtbl.ntp
-- tehtbl.reboot
-- tehtbl.ufw
-- tehtbl.update
-- tehtbl.ssh_server
-
 - docker_install
   - depends: geerlingguy.docker
 
 - ssh-keys deploying
 - ssh-hardening
 - ping (win && linux)
-- tbl.dotfiles
 
 - wireguard
 - backup borgbase
@@ -44,7 +22,6 @@
 
 # Collection "Maintenance"
 
-- update/upgrade
 - ssh-keys deploying
 - sshd-keys renewal
 - sudoers

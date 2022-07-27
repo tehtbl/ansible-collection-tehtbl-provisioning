@@ -1,0 +1,12 @@
+---
+# ------------------------------------------------------------------------
+# handlers file for cron
+# ------------------------------------------------------------------------
+
+- name: restart cron
+  service:
+    name: "{{ cron_service }}"
+    state: restarted
+  when:
+    - cron_service | length
+    - ansible_virtualization_type != "docker"

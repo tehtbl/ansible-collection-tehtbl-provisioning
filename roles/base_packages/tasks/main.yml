@@ -1,0 +1,26 @@
+---
+# ------------------------------------------------------------------------
+# tasks file for base_packages
+# ------------------------------------------------------------------------
+
+- name: update && upgrade
+  include_role:
+    name: tehtbl.update
+  vars:
+    update_autoremove: false
+    update_upgrade_command: safe
+    update_reboot: false
+
+- name: install mypackages
+  package:
+    name: "{{ mypackages_packages }}"
+    state: present
+  register: mypackages_install_mypackages
+  until: mypackages_install_mypackages is succeeded
+  retries: 3
+
+- name: reboot if needed
+  include_role:
+    name: tehtbl.reboot
+  when:
+    - ansible_virtualization_type != "docker"

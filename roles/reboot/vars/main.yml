@@ -1,0 +1,9 @@
+---
+# ------------------------------------------------------------------------
+# vars file for reboot
+# ------------------------------------------------------------------------
+
+_reboot_command:
+  default: shutdown -r now {{ reboot_message }}
+
+reboot_command: "{{ _reboot_command[ansible_os_family] | default(_reboot_command['default']) }}"

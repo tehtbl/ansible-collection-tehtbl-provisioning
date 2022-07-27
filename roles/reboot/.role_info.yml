@@ -1,0 +1,7 @@
+---
+gid: 44922
+name: reboot
+desc: Reboot your system if needed.
+deps: []
+tags:
+  - reboot

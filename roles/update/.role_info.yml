@@ -1,0 +1,9 @@
+---
+gid: 44969
+name: update
+desc: Install updates on your system.
+deps:
+  - tehtbl.reboot
+tags:
+  - updating
+  - update

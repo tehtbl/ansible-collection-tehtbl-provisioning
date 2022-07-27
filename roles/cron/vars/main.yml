@@ -1,0 +1,18 @@
+---
+# ------------------------------------------------------------------------
+# vars file for cron
+# ------------------------------------------------------------------------
+
+_cron_packages:
+  default:
+    - cron
+#  Debian:
+#    - cron
+
+cron_packages: "{{ _cron_packages[ansible_os_family] | default(_cron_packages['default']) }}"
+
+_cron_service:
+  default: cron
+#  Debian: cron
+
+cron_service: "{{ _cron_service[ansible_os_family] | default(_cron_service['default']) }}"

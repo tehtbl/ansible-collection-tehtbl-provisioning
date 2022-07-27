@@ -1,0 +1,35 @@
+---
+# ------------------------------------------------------------------------
+# tasks file for update
+# ------------------------------------------------------------------------
+
+- name: update all software (apt)
+  apt:
+    update_cache: true
+    upgrade: "{{ update_upgrade_command }}"
+    cache_valid_time: "{{ update_cache_valid_time }}"
+  register: update_all_software_apt
+  when:
+    - ansible_pkg_mgr == "apt"
+  until: update_all_software_apt is succeeded
+  retries: 3
+
+- name: apt autoremove (apt)
+  apt:
+    autoremove: "{{ update_autoremove }}"
+  when:
+    - ansible_pkg_mgr == "apt"
+    - update_autoremove | bool
+  tags:
+    - skip_ansible_lint
+
+- name: reboot for updates
+  include_role:
+    name: tehtbl.reboot
+  vars:
+    reboot_message: rebooting for tehtbl/ansible-role-update
+  when:
+    - update_all_software_apt.changed
+    - update_reboot | bool
+  tags:
+    - skip_ansible_lint

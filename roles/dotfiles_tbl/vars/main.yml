@@ -1,0 +1,15 @@
+---
+# ------------------------------------------------------------------------
+# vars file for dotfiles_tbl
+# ------------------------------------------------------------------------
+
+_dotfiles_tbl_packages:
+  default:
+    - make
+    - git
+    - tmux
+    - unzip
+    - wget
+    - curl
+
+dotfiles_tbl_packages: "{{ _dotfiles_tbl_packages[ansible_os_family] | default(_dotfiles_tbl_packages['default']) }}"

@@ -1,0 +1,10 @@
+---
+# ------------------------------------------------------------------------
+# vars file for ufw
+# ------------------------------------------------------------------------
+
+_ufw_packages:
+  default:
+    - ufw
+
+ufw_packages: "{{ _ufw_packages[ansible_os_family] | default(_ufw_packages['default']) }}"

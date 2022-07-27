@@ -1,0 +1,7 @@
+---
+gid: 45034
+name: swap
+desc: Install and configure a swap space on your system.
+deps: []
+tags:
+  - swap

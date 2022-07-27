@@ -1,0 +1,38 @@
+---
+dependency:
+  name: galaxy
+  options:
+    # ignore-certs: True
+    # ignore-errors: True
+    role-file: requirements.yml
+
+lint: |
+  set -e
+  yamllint molecule/default/converge.yml
+  ansible-lint molecule/default/converge.yml
+
+driver:
+  name: docker
+
+platforms:
+  - name: "${ROLE_NAME:-no_role_name}-${IMAGE}-${TAG:-no_tag}-${TOX_ENVNAME:-no_tox}"
+    image: "${NAMESPACE:-tehtbl}/${IMAGE:-ubuntu}:${TAG:-latest}"
+    command: /sbin/init
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  # config_options:
+  #   defaults:
+  #     stdout_callback: yaml
+  #     bin_ansible_callbacks: yes
+
+verifier:
+  # name: testinfra
+  name: ansible
+
+scenario:
+  name: default

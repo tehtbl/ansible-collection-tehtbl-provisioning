@@ -1,0 +1,29 @@
+---
+# ------------------------------------------------------------------------
+# vars file for ssh_server
+# ------------------------------------------------------------------------
+
+# Packages
+_ssh_server_packages:
+  default:
+    - openssh-server
+
+ssh_server_packages: "{{ _ssh_server_packages[ansible_os_family] | default(_ssh_server_packages['default']) }}"
+
+# Configuration file
+_ssh_server_configuration_file:
+  default: sshd_config
+
+ssh_server_configuration_file: "{{ _ssh_server_configuration_file[ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_ssh_server_configuration_file[ansible_os_family] | default(_ssh_server_configuration_file['default'])) }}"
+
+# Service
+_ssh_server_service:
+  default: sshd
+
+ssh_server_service: "{{ _ssh_server_service[ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_ssh_server_service[ansible_os_family] | default(_ssh_server_service['default'])) }}"
+
+# Configuration dir
+_ssh_server_config_directory:
+  default: /etc/ssh
+
+ssh_server_config_directory: "{{ _ssh_server_config_directory[ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_ssh_server_config_directory[ansible_os_family] | default(_ssh_server_config_directory['default'])) }}"

@@ -1,0 +1,77 @@
+---
+
+# TODO:
+#   - sshd server_ca
+#       - https://www.digitalocean.com/community/tutorials/how-to-create-an-ssh-ca-to-validate-hosts-and-clients-with-ubuntu
+#       - https://framkant.org/2017/07/scalable-access-control-using-openssh-certificates/
+#       - https://www.ssh.com/ssh/authorized_keys/openssh
+#       - https://gist.github.com/sivel/c68f601137ef9063efd7
+#       - https://engineering.fb.com/security/scalable-and-secure-access-with-ssh/
+
+# ------------------------------------------------------------------------
+# tasks file for ssh_server
+# ------------------------------------------------------------------------
+
+- name: install ssh server
+  package:
+    name: "{{ ssh_server_packages }}"
+    state: present
+  register: ssh_server_install_ssh_server
+  until: ssh_server_install_ssh_server is succeeded
+  retries: 3
+
+- name: configure ssh server
+  template:
+    src: "{{ ssh_server_configuration_file }}.j2"
+    dest: "{{ ssh_server_config_directory }}/{{ ssh_server_configuration_file }}"
+    owner: "root"
+    group: "root"
+    mode: "644"
+  notify:
+    - restart ssh server
+
+- name: remove old sshd host keys
+  file:
+    name: "/etc/ssh/{{ item }}"
+    state: absent
+  with_items:
+    - ssh_host_dsa_key
+    - ssh_host_dsa_key.pub
+    - ssh_host_ecdsa_key
+    - ssh_host_ecdsa_key.pub
+    - ssh_host_ed25519_key
+    - ssh_host_ed25519_key.pub
+    - ssh_host_rsa_key
+    - ssh_host_rsa_key.pub
+  when: ssh_server_renew_keys | bool
+
+- name: re-create sshd host keys
+  command: dpkg-reconfigure -plow -fnoninteractive openssh-server
+  when:
+    - ssh_server_renew_keys | bool
+    # TODO: - ansible_distribution == "Debian"
+
+- name: copy issue.net
+  copy:
+    owner: root
+    group: root
+    mode: 0644
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - {src: "issue.net", dest: "/etc/"}
+  when: ssh_server_copy_issue_net | bool
+
+- name: start and enable ssh_server
+  service:
+    name: "{{ ssh_server_service }}"
+    state: started
+    enabled: true
+  when:
+    - ansible_virtualization_type != "docker"
+
+# ------------------------------------------------------------------------
+# flush handlers
+# ------------------------------------------------------------------------
+- name: flush handlers
+  meta: flush_handlers

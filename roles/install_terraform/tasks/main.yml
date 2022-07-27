@@ -1,0 +1,13 @@
+---
+- name: Ensure unzip is installed.
+  package: name=unzip state=present
+
+- name: Download and unarchive Terraform.
+  unarchive:
+    src: https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_{{ terraform_arch }}.zip
+    dest: "{{ terraform_bin_path }}"
+    remote_src: true
+    creates: "{{ terraform_bin_path }}/terraform"
+    mode: 0755
+  become: yes
+  become_user: root
